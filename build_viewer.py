@@ -21,6 +21,10 @@ data = {
     "enemies": read("enemies.csv"),
     "modes": read("modes.csv"),
 }
+_groups = os.path.join(ROOT, "data", "enemy_groups.json")
+if os.path.exists(_groups):
+    with open(_groups, encoding="utf-8") as fh:
+        data["enemyGroups"] = json.load(fh)
 payload = json.dumps(data, ensure_ascii=False).replace("</", "<\\/")
 
 html = r"""<!doctype html>
@@ -177,6 +181,23 @@ html[data-theme=light] .mask{background:rgba(30,40,32,.35)}
 .backlink:hover{text-decoration:underline}
 .cardhead.clickable{cursor:pointer;border-radius:8px}
 .cardhead.clickable:hover h2{color:var(--acc)}
+/* ---- 敌人图鉴 ---- */
+.egrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:10px}
+.ecard{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:10px 12px;cursor:pointer}
+.ecard:hover{border-color:var(--acc)}
+.ehead{display:flex;gap:10px;align-items:center;min-width:0}
+.ehead img,.eph{width:52px;height:52px;object-fit:contain;background:#0d1912;border-radius:8px;flex:none}
+.eph{display:flex;align-items:center;justify-content:center;color:var(--dim);font-size:18px}
+.ename{font-weight:600;font-size:14px}
+.etags{display:flex;gap:4px;flex-wrap:wrap;margin-top:3px}
+.etag{font-size:10.5px;border:1px solid var(--line);border-radius:4px;padding:0 5px;color:var(--dim);white-space:nowrap}
+.ehp{display:flex;gap:10px;flex-wrap:wrap;font-size:11.5px;color:var(--dim);margin-top:8px;border-top:1px dashed var(--line);padding-top:6px}
+.ehp b{color:var(--text)}
+.edesc{font-size:12px;color:var(--dim);margin-top:6px;line-height:1.55;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.ecard.open .edesc{display:block;-webkit-line-clamp:unset}
+.eatt{font-size:11px;color:var(--dim);margin-top:6px;display:none;flex-wrap:wrap;gap:4px;align-items:center}
+.ecard.open .eatt{display:flex}
+.egrp{color:var(--dim);font-size:11.5px;margin:-2px 0 8px}
 /* ---- 分类查询 ---- */
 .filters{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:10px 14px;margin-bottom:12px}
 .frow{display:flex;gap:8px;align-items:flex-start;padding:6px 0;border-bottom:1px solid var(--line)}
@@ -371,9 +392,30 @@ function drawRows(){
     return rows;
   }
   if(tab==='enemies'){
-    let rows=D.enemies.filter(r=>!s||JSON.stringify(r).toLowerCase().includes(s));
-    $('#view').innerHTML=`<table><thead><tr><th>类型</th><th>敌人</th><th>标准</th><th>险境</th><th>绝境</th><th>终极</th><th>说明</th></tr></thead><tbody>`+
-      rows.map(r=>`<tr><td>${esc(r['类型'])}</td><td><span class="opname">${r['图标']?`<img class="avatar" loading="lazy" src="${esc(r['图标'])}" alt="">`:''}<b>${esc(r['敌人'])}</b></span></td><td>${esc(r['标准模拟'])}</td><td>${esc(r['险境模拟'])}</td><td>${esc(r['绝境模拟'])}</td><td>${esc(r['终极模拟'])}</td><td class="small">${esc(r['描述'])}</td></tr>`).join('')+'</tbody></table>';
+    const rows=D.enemies.filter(r=>!s||JSON.stringify(r).toLowerCase().includes(s));
+    const bosses=rows.filter(r=>r['类型']==='领袖');
+    const specs=rows.filter(r=>r['类型']!=='领袖');
+    const order=['特异','致命','复苏','元素','隐匿','折射','飞行','持续','频次'];
+    const groups=[...new Set(specs.map(r=>r['分组']).filter(Boolean))].sort((a,b)=>(order.indexOf(a)+1||99)-(order.indexOf(b)+1||99));
+    const gdesc=D.enemyGroups||{};
+    const bossCard=r=>`<div class="ecard" data-e="1">
+      <div class="ehead">${r['图标']?`<img loading="lazy" src="${esc(r['图标'])}" alt="">`:`<span class="eph">?</span>`}
+        <div><div class="ename">${esc(r['敌人'])}</div>
+          <div class="etags"><span class="etag">领袖</span><span class="etag">${esc(r['id'])}</span></div></div></div>
+      <div class="ehp"><span>标准 <b>${esc(r['标准模拟']||'—')}</b></span><span>险境 <b>${esc(r['险境模拟']||'—')}</b></span><span>绝境 <b>${esc(r['绝境模拟']||'—')}</b></span><span>终极 <b>${esc(r['终极模拟']||'—')}</b></span></div>
+      ${r['描述']?`<div class="edesc">${esc(r['描述'])}</div>`:''}</div>`;
+    const specCard=r=>`<div class="ecard" data-e="1">
+      <div class="ehead">${r['图标']?`<img loading="lazy" src="${esc(r['图标'])}" alt="">`:`<span class="eph">?</span>`}
+        <div style="min-width:0"><div class="ename">${esc(r['敌人'])}</div>
+          <div class="etags">${r['分组']?`<span class="etag">${esc(r['分组'])}</span>`:''}<span class="etag">${esc(r['敌人等级']||'敌人')}</span>${r['伤害类型']?`<span class="etag">${esc(r['伤害类型'])}</span>`:''}</div></div></div>
+      ${r['描述']?`<div class="edesc">${esc(r['描述'])}</div>`:''}
+      ${(r['技能']||r['普通敌人']||r['精英敌人'])?`<div class="eatt">${r['技能']?`<span class="etag">${esc(r['技能'])}</span>`:''}${r['普通敌人']?`<span class="etag">普通：${esc(r['普通敌人'])}</span>`:''}${r['精英敌人']?`<span class="etag">精英：${esc(r['精英敌人'])}</span>`:''}</div>`:''}</div>`;
+    $('#view').innerHTML =
+      (bosses.length?`<div class="sec"><span>领袖</span></div><div class="egrid">${bosses.map(bossCard).join('')}</div>`:'')+
+      (specs.length?`<div class="sec"><span>战术特训敌人</span></div>`+groups.map(g=>{
+        const list=specs.filter(r=>r['分组']===g);
+        return `<div class="sec"><span>${esc(g)}</span></div>${gdesc[g]?`<div class="egrp">${esc(gdesc[g])}</div>`:''}<div class="egrid">${list.map(specCard).join('')}</div>`;
+      }).join(''):'') || '<div class="qempty">没有匹配的敌人</div>';
     return rows;
   }
   let rows=D.modes.filter(r=>!s||JSON.stringify(r).toLowerCase().includes(s));
@@ -526,6 +568,8 @@ document.addEventListener('click',e=>{
   const jp=e.target.closest('[data-jump]'); if(jp){jumpBond(jp.dataset.jump);return;}
   const op=e.target.closest('[data-op]');
   if(op){ openOp(op.dataset.op, mview==='bond'?curBond:null); return; }
+  const ec=e.target.closest('[data-e]');
+  if(ec){ ec.classList.toggle('open'); return; }
   const bd=e.target.closest('[data-bond]');
   if(bd){ curBond=bd.dataset.bond; openBond(bd.dataset.bond); return; }
 });
