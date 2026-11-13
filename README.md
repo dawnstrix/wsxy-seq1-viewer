@@ -4,6 +4,8 @@
 
 **在线试用：** https://dawnstrix.github.io/wsxy-seq1-viewer/
 
+**极简版（单文件 48KB，无图片、双击即用）：** https://dawnstrix.github.io/wsxy-seq1-viewer/lite.html
+
 > 数据抓取时间：2026-11-13。开放期内官方还会做一次内容更新，届时重跑脚本即可刷新。
 
 ## 功能
@@ -14,7 +16,7 @@
 - **分页浏览**：干员 / 盟约 / 策略 / 装备 / 敌人 / 模式
 - **三套主题**：协议（默认，深绿军用终端风）/ 深色 / 浅色，右上角循环切换并记住选择
 - **深链**：`#tab=bonds`、`#op=初雪`、`#bond=乌萨斯`、`#bondview=谢拉格`、`#theme=light`
-- 全离线：`index.html` 内嵌数据，图标走本地 `assets/`，双击即可打开
+- 全离线：`index.html` 内嵌数据，图标走本地 `assets/`，双击即可打开；不想带素材就用 `lite.html`（单文件 48KB）
 
 ## 数据来源
 
@@ -29,8 +31,10 @@
 ## 目录结构
 
 ```
-index.html          # 可直接打开的成品（数据已内嵌）
+index.html          # 完整版成品（数据内嵌 + 本地图标）
+lite.html           # 极简版（单文件、无图片、双击即用）
 build_viewer.py     # 由 data/*.csv 重新生成 index.html
+build_lite.py       # 由 data/*.csv 重新生成 lite.html
 data/*.csv          # 整理后的结构化数据
 assets/             # 干员头像、盟约/装备/策略/敌人图标、职业图标
 ```
