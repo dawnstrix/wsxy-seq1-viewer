@@ -395,7 +395,7 @@ function renderQuery(){
       <div class="chips">${chips.join('')}</div></div>`).join('');
   const list=rows.map(o=>{
     const bonds=o['盟约'].split(' / ').filter(Boolean).map(bondChip).join('');
-    return `<div class="qrow">
+    return `<div class="qrow" data-op="${esc(o['干员'])}">
       <div class="qava" data-op="${esc(o['干员'])}">${o['头像']?`<img loading="lazy" src="${esc(o['头像'])}" alt="">`:''}
         <div style="margin-top:4px">${rankBadge(+o['等阶'])}</div><div class="qname">${esc(o['干员'])}</div></div>
       <div class="qbody">
