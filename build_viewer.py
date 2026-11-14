@@ -130,7 +130,7 @@ tr:hover td{background:var(--hover)}
 .small{color:var(--dim);font-size:12px}
 .avatar{width:34px;height:34px;border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:8px;background:var(--imgbg);flex:none}
 .opname{display:flex;align-items:center;gap:6px}
-.ico{width:42px;height:42px;border-radius:10px;object-fit:contain;background:#26332d;flex:none}
+.ico{width:64px;height:64px;border-radius:12px;object-fit:contain;background:#26332d;flex:none;padding:4px}
 .cardhead{display:flex;align-items:center;gap:10px;margin-bottom:4px}
 .cardhead h2{margin:0}
 .ico-s{width:26px;height:26px;object-fit:contain;vertical-align:middle;margin-right:6px;background:#26332d;border-radius:6px}
@@ -166,7 +166,7 @@ html[data-theme=light] .mask{background:rgba(30,40,32,.35)}
 .mhalf.elite .hl{color:var(--corefg)}
 .bondlink{cursor:pointer}
 .bondlink:hover{filter:brightness(1.25)}
-.bico{width:16px;height:16px;object-fit:contain;border-radius:50%;vertical-align:-3px;margin-right:4px;background:var(--imgbg)}
+.bico{width:20px;height:20px;object-fit:contain;border-radius:50%;vertical-align:-4px;margin-right:4px;background:#26332d}
 .tag .n{color:var(--dim);font-size:11px;margin-left:3px}
 .mfoot{display:flex;gap:8px;justify-content:flex-end;margin-top:14px}
 .btn{background:var(--tagbg);border:1px solid var(--line);color:var(--text);border-radius:8px;padding:6px 14px;cursor:pointer;font-size:13px}
@@ -209,7 +209,7 @@ html[data-theme=light] .mask{background:rgba(30,40,32,.35)}
 .chip.on{background:var(--chipon);border-color:var(--chiponbd);color:var(--chiponfg)}
 .chip .n{color:var(--dim);font-size:11px}
 .chip.on .n{color:var(--chipn)}
-.chip img{width:18px;height:18px;object-fit:contain;border-radius:4px}
+.chip img{width:22px;height:22px;object-fit:contain;border-radius:4px}
 .allbtn{background:var(--allbg);border:1px solid var(--allbd);color:var(--allfg);border-radius:8px;font-size:12px;padding:3px 8px;cursor:pointer}
 .allbtn.off{background:var(--chipbg);border-color:var(--line);color:var(--dim)}
 .qlist{display:flex;flex-direction:column}
@@ -226,7 +226,7 @@ html[data-theme=light] .mask{background:rgba(30,40,32,.35)}
 .qlv.elite{background:var(--elitebg);color:var(--elitefg)}
 .bchips{display:flex;gap:4px;flex-wrap:wrap;flex:none}
 .bchip{display:inline-flex;align-items:center;gap:4px;background:var(--tagbg);border:1px solid var(--line);border-radius:99px;padding:0 7px 0 1px;font-size:11px;color:var(--text);white-space:nowrap}
-.bchip img{width:18px;height:18px;object-fit:contain;border-radius:50%;background:var(--imgbg)}
+.bchip img{width:22px;height:22px;object-fit:contain;border-radius:50%;background:#26332d}
 .qtraits{color:var(--text);font-size:12.5px;min-width:0}
 .qempty{color:var(--dim);padding:40px 0;text-align:center}
 @media(max-width:700px){th:nth-child(6),td:nth-child(6),th:nth-child(7),td:nth-child(7){display:none}}
@@ -240,7 +240,7 @@ html[data-theme=light] .mask{background:rgba(30,40,32,.35)}
   .bchips{grid-area:bonds;flex-wrap:wrap;min-width:0}
   .qtraits{grid-area:traits;font-size:12px;line-height:1.55}
   .bchip{font-size:10.5px;padding:0 6px 0 1px;max-width:100%}
-  .bchip img{width:15px;height:15px}
+  .bchip img{width:18px;height:18px}
   .qline + .qline{margin-top:2px}
 }
 @media(max-width:560px){
@@ -271,7 +271,7 @@ html[data-theme=light] .mask{background:rgba(30,40,32,.35)}
   .qlv{flex:none;white-space:nowrap;margin-top:0;font-size:10.5px;padding:1px 5px}
   .bchips{flex:1 1 auto;min-width:0;gap:3px}
   .bchip{font-size:10.5px;padding:0 6px 0 1px;gap:3px}
-  .bchip img{width:15px;height:15px}
+  .bchip img{width:18px;height:18px}
   .qtraits{flex:1 1 100%;font-size:12px;line-height:1.62;padding-top:1px}
 }
 </style>
